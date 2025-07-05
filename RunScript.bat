@@ -32,12 +32,14 @@ timeout /t 5 >nul
 REG DELETE "HKCU\Software\Classes\ms-settings" /f >nul 2>&1
 
 :: ===========================
-:: Tutup semua jendela CMD dan PowerShell
-:: ===========================
-taskkill /f /im cmd.exe >nul 2>&1
-taskkill /f /im powershell.exe >nul 2>&1
-
-:: ===========================
 :: Tampilkan Home Screen (Windows + D)
 :: ===========================
-powershell -command "$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESC}'); Start-Sleep -Milliseconds 200; $wshell.SendKeys('^{d}')"
+powershell -command "$wshell = New-Object -ComObject wscript.shell; $wshell.SendKeys('^{ESC}'); Start-Sleep -Milliseconds 300; $wshell.SendKeys('^{d}')"
+
+:: ===========================
+:: End Task Semua cmd dan powershell (tutup semua jendela terminal)
+:: ===========================
+timeout /t 2 >nul
+taskkill /f /im cmd.exe >nul 2>&1
+taskkill /f /im powershell.exe >nul 2>&1
+exit
